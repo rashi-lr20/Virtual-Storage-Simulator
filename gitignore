@@ -1,0 +1,5 @@
+simulator
+simulator.exe
+*.exe
+*.o
+tests_asan
