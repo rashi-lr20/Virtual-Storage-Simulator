@@ -1,1 +1,0 @@
-g++ -std=c++17 -Wall -Wextra -g -Iinclude src/main.cpp -o simulator
