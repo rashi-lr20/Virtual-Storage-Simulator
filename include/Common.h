@@ -4,7 +4,7 @@
 enum class Strategy {
     FIRST_FIT,
     BEST_FIT,
-    WORST_FIR,
+    WORST_FIT,
 };
 
 enum class AllocResult{
