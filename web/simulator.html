@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulator — StorageSim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Member 1 · Array</div>
+      <h1>Storage simulator</h1>
+      <p class="lead">Every cell is one block of the <code>storage[]</code> array. Allocate a file to see it take consecutive blocks, release it to free them again.</p>
+    </div>
+    <button id="btnDemo" class="btn primary">▶ Guided demo</button>
+  </div>
+
+  <div id="actionBar"></div>
+  <div id="caption" class="caption" role="status" aria-live="polite">Allocate a file, or press <b>Guided demo</b> to watch the fragmentation example.</div>
+
+  <div class="grid-2">
+    <div class="stack">
+      <section class="panel" id="panelBlocks">
+        <div class="panel-head">
+          <div><h2>Storage array</h2><p class="sub">Hover a file chip to light up its blocks. Click ✕ on a chip to release that file.</p></div>
+          <span class="tag m1">Member 1</span>
+        </div>
+        <div id="blockGrid" class="block-grid"></div>
+        <div id="fileChips" class="chips"></div>
+      </section>
+    </div>
+    <div class="stack">
+      <section class="panel">
+        <div class="panel-head"><h2>Quick numbers</h2><a class="muted" href="analysis.html" style="font-size:12.5px">All statistics →</a></div>
+        <div id="miniStats" class="cards4"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Operation log</h2></div>
+        <ul id="logList" class="log"></ul>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script src="js/blocks.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/common.js"></script>
+<script>
+  App.start({
+    page: 'simulator.html',
+    bar: 'full',
+    render: function (state, action) {
+      App.safe('blocks.js', function () { renderBlocks(state, action); });
+      App.safe('stats.js', function () { renderMiniStats(state); });
+    }
+  });
+</script>
+</body>
+</html>

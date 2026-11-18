@@ -9,7 +9,7 @@ enum class Strategy {
 
 enum class AllocResult{
     SUCCESS,
-    INVALID REQUEST,
+    INVALID_REQUEST,
     DUPLICATE_ID,
     NO_SPACE,
     FRAGMENTATION,
