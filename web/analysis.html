@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistics — StorageSim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Member 3 · Analyzer</div>
+      <h1>Statistics &amp; fragmentation</h1>
+      <p class="lead">Numbers computed by the C++ <code>FragmentationAnalyzer</code> from the array and the linked list. Use the bar to create some activity.</p>
+    </div>
+  </div>
+
+  <div id="actionBar"></div>
+  <div id="caption" class="caption" role="status" aria-live="polite">Press <b>Random fill</b> a few times, then watch the fragmentation trend.</div>
+
+  <div id="statCards" class="cards5"></div>
+
+  <div class="grid-eq">
+    <div class="stack">
+      <section class="panel">
+        <div class="panel-head"><div><h2>Fragmentation</h2><p class="sub"><code>1 − largest free segment ÷ total free blocks</code></p></div><span class="tag m3">Member 3</span></div>
+        <div id="fragBlock"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><div><h2>Fragmentation over time</h2><p class="sub">After every allocate and release. The C++ program remembers it, so it survives page changes.</p></div></div>
+        <div id="histBlock"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Definitions (for your report)</h2></div>
+        <ul class="defs">
+          <li><b>Free segment</b>: a continuous run of free blocks. Each one is a node of the linked list.</li>
+          <li><b>Largest free segment</b>: the biggest node. A contiguous request can only succeed if it fits in this one.</li>
+          <li><b>Fragmentation failure</b>: total free blocks ≥ request, but the largest segment &lt; request.</li>
+          <li><b>No-space failure</b>: total free blocks &lt; request.</li>
+          <li><b>Consistency check</b>: <code>checkConsistency</code> rebuilds the free runs from the array and compares them with the list, node by node.</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="stack">
+      <section class="panel">
+        <div class="panel-head"><h2>Why did the last request fail?</h2></div>
+        <div id="whyBox" class="why"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>How free space is split</h2></div>
+        <div id="segBlock"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Outcome counters</h2></div>
+        <div id="counters" class="counters" style="margin-top:0"></div>
+        <div id="consistency" class="consistency"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Operation log</h2></div>
+        <ul id="logList" class="log"></ul>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script src="js/stats.js"></script>
+<script src="js/common.js"></script>
+<script>
+  App.start({
+    page: 'analysis.html',
+    bar: 'quick',
+    render: function (state) {
+      App.safe('stats.js', function () { renderStats(state); renderWhyFailed(state); });
+    }
+  });
+</script>
+</body>
+</html>
