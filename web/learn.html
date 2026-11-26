@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learn — StorageSim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div id="nav"></div>
+<main class="page" style="max-width:1000px">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Learn · Everyone</div>
+      <h1>The whole idea in six steps</h1>
+      <p class="lead">Read this once and you can explain the project. The animations on this page are fixed illustrations; the real thing runs in C++ on the Simulator page.</p>
+    </div>
+    <a class="btn primary" href="simulator.html">Open the simulator →</a>
+  </div>
+
+  <!-- 1 -->
+  <div class="lesson"><div class="num">1</div><div>
+    <h2>Think of a parking lot</h2>
+    <p>Imagine 20 parking spots in a row. Each car (a <b>file</b>) needs several spots <b>side by side</b>. Cars arrive (<b>allocate</b>) and leave (<b>release</b>). After a while the empty spots are scattered in small gaps, so a big vehicle may not fit even though many spots are empty in total. That problem is called <b>fragmentation</b>, and this project simulates it.</p>
+    <p>Replace spots with <b>blocks</b> and cars with <b>files</b>, and you have the project. Nothing touches your real disk: the storage exists only inside the C++ program.</p>
+  </div></div>
+
+  <!-- 2 -->
+  <div class="lesson"><div class="num">2</div><div>
+    <h2>Two data structures, two jobs</h2>
+    <div class="two">
+      <div class="concept"><span class="tag m1">Member 1</span><h3 style="margin-top:8px">Array of blocks</h3>
+        <p>A row of boxes numbered 0, 1, 2 … Each box remembers: used or free, and which file. It is the <b>complete picture</b>, block by block.</p>
+        <div class="q">Answers: “What is in block i?” · O(1)</div></div>
+      <div class="concept"><span class="tag m2">Member 2</span><h3 style="margin-top:8px">Linked list of free gaps</h3>
+        <p>Each node says <code>[start, size]</code> for one run of free blocks. It is a <b>short summary</b> of only the free space.</p>
+        <div class="q">Answers: “Where is free space, and how big?” · O(F)</div></div>
+    </div>
+    <p style="margin-top:12px">Why both? With only the array, finding a gap means scanning every block every time. The list lets a strategy look at just the gaps.</p>
+  </div></div>
+
+  <!-- 3 -->
+  <div class="lesson"><div class="num">3</div><div>
+    <h2>Watch it happen</h2>
+    <p>Step through the example from the lab guide. Watch the array on top and the linked list below change together.</p>
+    <section class="panel">
+      <div id="storyGrid" class="block-grid" style="--cell:34px"></div>
+      <div class="hl-title" style="margin:14px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700">Free list</div>
+      <div id="storyList" class="list-view" style="min-height:70px"></div>
+      <div id="storyCap" class="story-cap"></div>
+      <div class="stepper-ctl">
+        <button id="stPrev" class="btn">← Back</button>
+        <button id="stNext" class="btn primary">Next →</button>
+        <button id="stPlay" class="btn">▶ Autoplay</button>
+        <span class="count" id="stCount"></span>
+      </div>
+    </section>
+  </div></div>
+
+  <!-- 4 -->
+  <div class="lesson"><div class="num">4</div><div>
+    <h2>Three ways to choose a gap</h2>
+    <p>If several gaps are big enough, which one should a request use? Move the slider: the free gaps are <b>3, 8, 5 and 12</b>.</p>
+    <section class="panel">
+      <div class="lab-size"><input id="demoReq" type="range" min="1" max="13" value="4" aria-label="Request size"><div class="big-number" id="demoReqNum">4</div><span class="muted">blocks requested</span></div>
+      <div id="demoGaps" class="gaps"></div>
+      <div id="demoRows"></div>
+      <p class="hint">Illustration of the three rules. The real implementation is <code>AllocationManager::chooseSegment</code> in C++, which you can try on the <a href="freelist.html">Free list</a> page.</p>
+    </section>
+  </div></div>
+
+  <!-- 5 -->
+  <div class="lesson"><div class="num">5</div><div>
+    <h2>Cost of each operation</h2>
+    <section class="panel">
+      <table class="plain">
+        <thead><tr><th>Operation</th><th>Time</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Read <code>storage[i]</code></td><td>O(1)</td><td>An array is one block of memory; the address is computed directly.</td></tr>
+          <tr><td>First Fit search</td><td>O(F)</td><td>Walks the list; may stop early but worst case looks at every node.</td></tr>
+          <tr><td>Best / Worst Fit search</td><td>O(F)</td><td>Must look at every free node.</td></tr>
+          <tr><td>Mark or clear n blocks</td><td>O(n)</td><td>One step per block of the file.</td></tr>
+          <tr><td>Release + merge</td><td>O(F)</td><td>Find the position in the sorted list; merging itself is O(1).</td></tr>
+          <tr><td>Statistics from the list</td><td>O(F)</td><td>One pass over the nodes.</td></tr>
+        </tbody>
+      </table>
+      <p class="hint">N = total blocks, F = number of free segments, n = size of the request.</p>
+    </section>
+  </div></div>
+
+  <!-- 6 -->
+  <div class="lesson"><div class="num">6</div><div>
+    <h2>Viva cheat-sheet</h2>
+    <details class="faq"><summary>What is the project in one minute?</summary><div>We represent virtual storage as an array of blocks and keep the current contiguous free regions in a linked list. The simulator processes allocate and release requests, updates both structures, reports free blocks, free segments and the largest free segment, and detects failures caused by fragmentation. We compare First, Best and Worst Fit on identical workloads.</div></details>
+    <details class="faq"><summary>Why can an allocation fail when there is enough free space?</summary><div>Contiguous allocation needs all blocks in a row. If the free space is split into several gaps, no single gap may be big enough. Example: gaps of 5 and 6 are 11 free blocks in total, but a request for 7 fails.</div></details>
+    <details class="faq"><summary>Why an array and a linked list?</summary><div>The array shows what is in every block (O(1) lookup). The linked list stores only the free gaps, so a strategy walks F nodes instead of scanning N blocks, and splitting or merging gaps is just pointer changes.</div></details>
+    <details class="faq"><summary>How does release merge neighbouring gaps?</summary><div>The list is sorted by start. After clearing the blocks we find the previous and next node. If the previous ends exactly where the released run starts, grow it. If the next starts exactly where the run ends, merge it too. Four cases: none, previous, next, both.</div></details>
+    <details class="faq"><summary>First vs Best vs Worst Fit?</summary><div>First Fit takes the first gap that is big enough. Best Fit takes the smallest gap that is big enough. Worst Fit takes the largest gap. Same workload, same seed, different leftovers. We report what our own experiments show, without deciding in advance which one wins.</div></details>
+    <details class="faq"><summary>What does the consistency check do?</summary><div><code>checkConsistency</code> rebuilds every maximal run of free blocks from the array and compares it with the linked list node by node. If they ever disagree, there is a bug. The pages show it as “Consistent”.</div></details>
+    <details class="faq"><summary>What did the web page do and what did C++ do?</summary><div>All data-structure work (array, list, strategies, statistics, experiments) is in C++. The page sends a request such as <code>/api/allocate?id=A&amp;size=5</code> and draws the JSON answer.</div></details>
+  </div></div>
+
+  <div style="text-align:center;margin-top:10px"><a class="btn primary lg" href="simulator.html">Try it yourself →</a></div>
+</main>
+
+<script src="js/blocks.js"></script>
+<script src="js/story.js"></script>
+<script src="js/common.js"></script>
+<script>
+  App.start({ page: 'learn.html', bar: 'none' });
+
+  // ---------- lesson 3: stepper ----------
+  (function () {
+    const grid = document.getElementById('storyGrid'), list = document.getElementById('storyList');
+    const cap = document.getElementById('storyCap'), count = document.getElementById('stCount');
+    let k = 0, timer = null;
+    function show() {
+      const f = STORY[k], frame = buildFrame(STORY_TOTAL, f.files);
+      drawStoryGrid(grid, frame, f.mark, f.bad);
+      drawStoryList(list, frame);
+      cap.textContent = f.caption;
+      cap.className = 'story-cap' + (f.bad ? ' bad' : '');
+      count.textContent = 'step ' + (k + 1) + ' / ' + STORY.length;
+      document.getElementById('stPrev').disabled = k === 0;
+      document.getElementById('stNext').disabled = k === STORY.length - 1;
+    }
+    function stop() { clearInterval(timer); timer = null; document.getElementById('stPlay').textContent = '▶ Autoplay'; }
+    document.getElementById('stNext').addEventListener('click', function () { stop(); if (k < STORY.length - 1) { k++; show(); } });
+    document.getElementById('stPrev').addEventListener('click', function () { stop(); if (k > 0) { k--; show(); } });
+    document.getElementById('stPlay').addEventListener('click', function () {
+      if (timer) { stop(); return; }
+      if (k === STORY.length - 1) k = 0;
+      show();
+      this.textContent = '❚❚ Pause';
+      timer = setInterval(function () { if (k < STORY.length - 1) { k++; show(); } else stop(); }, 2800);
+    });
+    show();
+  })();
+
+  // ---------- lesson 4: the three rules on fixed gaps ----------
+  (function () {
+    const gaps = [3, 8, 5, 12];
+    const slider = document.getElementById('demoReq');
+    function pick(n, rule) {
+      let chosen = -1;
+      for (let i = 0; i < gaps.length; i++) {
+        if (gaps[i] < n) continue;
+        if (rule === 'first') return i;
+        if (chosen < 0 || (rule === 'best' && gaps[i] < gaps[chosen]) || (rule === 'worst' && gaps[i] > gaps[chosen])) chosen = i;
+      }
+      return chosen;
+    }
+    function draw() {
+      const n = parseInt(slider.value, 10);
+      document.getElementById('demoReqNum').textContent = n;
+      const picks = { first: pick(n, 'first'), best: pick(n, 'best'), worst: pick(n, 'worst') };
+      let html = '';
+      gaps.forEach(function (g, i) {
+        let badges = '';
+        ['first', 'best', 'worst'].forEach(function (r) { if (picks[r] === i) badges += '<span class="badge ' + r + '">' + r.toUpperCase() + '</span>'; });
+        html += '<div class="gap' + (g < n ? ' no' : '') + '"><small>gap ' + (i + 1) + '</small><b>' + g + '</b><div class="bg">' + badges + '</div></div>';
+      });
+      document.getElementById('demoGaps').innerHTML = html;
+      const names = { first: 'First Fit', best: 'Best Fit', worst: 'Worst Fit' };
+      const rules = { first: 'the first gap that is big enough', best: 'the smallest gap that is big enough', worst: 'the largest gap' };
+      let rows = '';
+      ['first', 'best', 'worst'].forEach(function (r) {
+        rows += '<div class="lab-row"><div class="nm"><i class="sdot ' + r + '"></i>' + names[r] + '</div><div><div class="why-t">takes ' + rules[r] + '</div><div class="res">' +
+          (picks[r] < 0 ? 'no gap is big enough: the request FAILS' : 'gap of size ' + gaps[picks[r]] + ' · leftover ' + (gaps[picks[r]] - n)) + '</div></div></div>';
+      });
+      document.getElementById('demoRows').innerHTML = rows;
+    }
+    slider.addEventListener('input', draw);
+    draw();
+  })();
+</script>
+</body>
+</html>
