@@ -1,0 +1,6 @@
+# Worked example from the guide (20 blocks). Expect the last request to fail by fragmentation.
+ALLOCATE A 5
+ALLOCATE B 4
+ALLOCATE C 5
+RELEASE A
+ALLOCATE D 7
