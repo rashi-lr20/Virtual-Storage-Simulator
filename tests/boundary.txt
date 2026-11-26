@@ -1,0 +1,9 @@
+# 20 blocks: exact fit, then oversized, zero-size, duplicate id and unknown release
+ALLOCATE A 20
+ALLOCATE B 1
+RELEASE A
+ALLOCATE C 21
+ALLOCATE D 0
+ALLOCATE E 20
+ALLOCATE E 2
+RELEASE Z
