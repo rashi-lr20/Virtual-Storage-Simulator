@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free list — StorageSim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Member 2 · Linked list</div>
+      <h1>Free list &amp; strategies</h1>
+      <p class="lead">One node per gap of free blocks, kept sorted by position. Allocation shrinks a node; release inserts or merges nodes.</p>
+    </div>
+  </div>
+
+  <div id="actionBar"></div>
+  <div id="caption" class="caption" role="status" aria-live="polite">Change the size in the bar to see which node each strategy would choose.</div>
+
+  <div class="stack">
+    <section class="panel" id="panelList">
+      <div class="panel-head">
+        <div><h2>Free list <span class="muted">(linked list)</span></h2>
+          <p class="sub">Each node is <code>[start | size | next]</code>. Hover a node to light up its blocks below.</p></div>
+        <span class="tag m2">Member 2</span>
+      </div>
+      <div id="listView" class="list-view"></div>
+      <div id="previewNote" class="preview-note"></div>
+    </section>
+
+    <div class="grid-eq">
+      <section class="panel">
+        <div class="panel-head"><div><h2>Strategy lab</h2><p class="sub">Which node would each strategy choose for a request of this size?</p></div><span class="tag m2">Member 2</span></div>
+        <div class="lab-size">
+          <input id="labSize" type="range" min="1" max="40" value="5" aria-label="Request size">
+          <div class="big-number" id="labSizeNum">5</div><span class="muted">blocks</span>
+        </div>
+        <div id="labRows"></div>
+        <p class="hint">First Fit can stop early; Best and Worst Fit must look at every node. That is why all three are O(F), where F = number of free nodes.</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><h2>What happens on release</h2><p class="sub">The four cases <code>addFreeRun</code> handles. R = the released blocks.</p></div><span class="tag m2">Member 2</span></div>
+        <div class="cases">
+          <div class="case"><h4>1 · No free neighbour</h4><div class="mini"><i class="u"></i><i class="u"></i><i class="r"></i><i class="u"></i><i class="u"></i></div>Insert a <b>new node</b> between prev and next.</div>
+          <div class="case"><h4>2 · Free on the left</h4><div class="mini"><i class="f"></i><i class="f"></i><i class="r"></i><i class="u"></i><i class="u"></i></div><b>Grow prev</b>: size += released.</div>
+          <div class="case"><h4>3 · Free on the right</h4><div class="mini"><i class="u"></i><i class="u"></i><i class="r"></i><i class="f"></i><i class="f"></i></div><b>Move next</b> back and grow it.</div>
+          <div class="case"><h4>4 · Free on both sides</h4><div class="mini"><i class="f"></i><i class="f"></i><i class="r"></i><i class="f"></i><i class="f"></i></div>Three nodes become <b>one</b>; delete the right node.</div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel" id="panelBlocks">
+      <div class="panel-head"><div><h2>Storage array</h2><p class="sub">The same storage, for context.</p></div><span class="tag m1">Member 1</span></div>
+      <div id="blockGrid" class="block-grid"></div>
+      <div id="fileChips" class="chips"></div>
+    </section>
+  </div>
+</main>
+
+<script src="js/blocks.js"></script>
+<script src="js/freelist.js"></script>
+<script src="js/common.js"></script>
+<script>
+  function drawList(state, preview) {
+    App.safe('freelist.js', function () { renderFreeList(state, preview); renderStrategyLab(state, preview); });
+  }
+  App.start({
+    page: 'freelist.html',
+    bar: 'full',
+    render: function (state, action, preview) {
+      App.safe('blocks.js', function () { renderBlocks(state, action); });
+      drawList(state, preview);
+      const slider = $('labSize');
+      slider.max = Math.max(2, state.total);
+      if (document.activeElement !== slider && $('allocSize')) slider.value = $('allocSize').value;
+    },
+    onPreview: drawList
+  });
+  // the slider drives the same size box that the action bar uses
+  $('labSize').addEventListener('input', function () {
+    $('allocSize').value = this.value;
+    App.refreshPreview();
+  });
+  $('allocSize').addEventListener('input', function () { $('labSize').value = this.value; });
+</script>
+</body>
+</html>
