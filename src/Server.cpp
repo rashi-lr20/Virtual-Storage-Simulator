@@ -212,7 +212,11 @@ static std::string rowJson(const RunResult& r) {
 }
 
 int main(int argc, char* argv[]) {
-    int port = argc > 1 ? std::atoi(argv[1]) : 8080;
+ const char* env_port = std::getenv("PORT");
+
+int port = argc > 1
+    ? std::atoi(argv[1])
+    : (env_port ? std::atoi(env_port) : 8080);
     sim.reset(40, Strategy::FIRST_FIT);
 
     httplib::Server svr;
@@ -383,7 +387,7 @@ int main(int argc, char* argv[]) {
               << "     http://localhost:" << port << "\n\n"
               << " (Press Ctrl+C in this window to stop the program)\n"
               << "=====================================================\n";
-    if (!svr.listen("127.0.0.1", port)) {
+if (!svr.listen("0.0.0.0", port)) {
         std::cerr << "ERROR: could not start on port " << port << ". Is another copy still running?\n"
                   << "Close it, or try another port:  gui_server 8090\n";
         return 1;
