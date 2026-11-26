@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compare — StorageSim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Member 4 · Workloads</div>
+      <h1>Strategy comparison</h1>
+      <p class="lead">The same random workload is run through First, Best and Worst Fit by the C++ program, on a fresh storage each time. The numbers below come from C++, not from this page.</p>
+    </div>
+  </div>
+
+  <div id="caption" class="caption" role="status" aria-live="polite">Pick a preset and press <b>Compare</b>, or run the full 3-size experiment.</div>
+
+  <section class="panel">
+    <div class="panel-head"><div><h2>Workload</h2><p class="sub">Same seed means the same list of operations for every strategy, which makes the comparison fair.</p></div><span class="tag m4">Member 4</span></div>
+    <div class="presets"><span>Presets:</span>
+      <button class="btn" data-p="50,20,1,6">Small</button>
+      <button class="btn" data-p="500,200,1,20">Medium</button>
+      <button class="btn" data-p="5000,2000,1,100">Large</button>
+    </div>
+    <div class="cmp-form">
+      <label class="field">Blocks <input id="cmpBlocks" type="number" min="10" max="20000" value="500"></label>
+      <label class="field">Operations <input id="cmpOps" type="number" min="1" max="20000" value="200"></label>
+      <label class="field">Seed <input id="cmpSeed" type="number" min="1" value="1"></label>
+      <label class="field">Max size <input id="cmpMax" type="number" min="1" value="20"></label>
+      <button id="btnCompare" class="btn primary">Compare</button>
+      <button id="btnExperiment" class="btn">Run 3-size experiment</button>
+    </div>
+    <div id="cmpOut" class="cmp-out"><p class="muted">Results appear here. The 3-size experiment also saves every run to <code>results/results.csv</code>.</p></div>
+  </section>
+
+  <section class="panel" style="margin-top:18px">
+    <div class="panel-head"><h2>How to read the results</h2></div>
+    <ul class="defs">
+      <li><b>Success</b>: allocation requests that found a gap.</li>
+      <li><b>Failed (frag.)</b>: requests that failed although enough free space existed in total.</li>
+      <li><b>Avg frag.</b>: the fragmentation value averaged over every step of the workload.</li>
+      <li><b>Time</b>: spent inside allocate and release only; use it to compare strategies, not as an absolute number.</li>
+      <li>Try other seeds. One workload can be lucky or unlucky, so do not draw conclusions from a single run. Report what you actually see.</li>
+    </ul>
+  </section>
+</main>
+
+<script src="js/compare.js"></script>
+<script src="js/common.js"></script>
+<script>
+  App.start({ page: 'compare.html', bar: 'none' });
+  initComparePage();
+</script>
+</body>
+</html>
