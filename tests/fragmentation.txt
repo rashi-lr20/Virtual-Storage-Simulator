@@ -1,0 +1,10 @@
+# 14 blocks: leaves free runs of 3, 4, 5 then asks for 8
+ALLOCATE A 3
+ALLOCATE B 1
+ALLOCATE C 4
+ALLOCATE D 1
+ALLOCATE E 5
+RELEASE A
+RELEASE C
+RELEASE E
+ALLOCATE F 8
