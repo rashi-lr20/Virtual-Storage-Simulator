@@ -15,6 +15,14 @@ enum class AllocResult{
     FRAGMENTATION,
 };
 
+inline const char* strategyName(Strategy s) {
+    switch (s) {
+        case Strategy::FIRST_FIT: return "First Fit";
+        case Strategy::BEST_FIT:  return "Best Fit";
+        default:                  return "Worst Fit";
+    }
+}
+
 inline const char* resultName(AllocResult r) {
     switch(r){
         case AllocResult::SUCCESS:
