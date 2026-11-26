@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StorageSim — see how storage fragments</title>
+<meta name="description" content="An interactive Virtual Storage Allocation and Fragmentation Simulator built with C++ data structures.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div id="nav"></div>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">Data Structures Lab · Project 10</div>
+    <h1>See how storage <span class="grad">fragments</span>, one block at a time.</h1>
+    <p class="lead">A virtual disk made of an <b>array</b> of blocks and a <b>linked list</b> of free gaps. Allocate and release files, compare First, Best and Worst Fit, and watch free space break into pieces. Every step is computed by C++ and drawn live.</p>
+    <div class="cta">
+      <a class="btn primary lg" href="simulator.html">Launch the simulator →</a>
+      <a class="btn lg" href="learn.html">Take the 2-minute tour</a>
+    </div>
+    <div class="hero-facts">
+      <div><b>2</b>data structures</div>
+      <div><b>3</b>allocation strategies</div>
+      <div><b>4</b>C++ modules</div>
+      <div><b>0</b>STL containers in the core</div>
+    </div>
+  </div>
+
+  <div class="hero-card" aria-label="Animated example">
+    <div class="hl-title">Storage array</div>
+    <div id="heroGrid" class="block-grid" style="--cell:32px"></div>
+    <div class="hl-title">Free list (linked list)</div>
+    <div id="heroList" class="list-view" style="min-height:70px"></div>
+    <div id="heroCap" class="cap"></div>
+    <div id="heroDots" class="dots"></div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="title">Explore each part</h2>
+  <p class="sub-lead">Every feature has its own page. The C++ program keeps one simulation running, so your storage is still there when you move between pages.</p>
+  <div class="features">
+    <a class="fcard" href="learn.html"><div class="ic">📘</div><h3>Learn</h3>
+      <p>The idea in plain words, an animated walk-through of allocation, release, merging and fragmentation, and a viva cheat-sheet.</p>
+      <div class="go"><span>Open →</span><span class="tag m4">Everyone</span></div></a>
+    <a class="fcard" href="simulator.html"><div class="ic">▦</div><h3>Simulator</h3>
+      <p>The storage <b>array</b> as coloured blocks. Allocate, release, random-fill, and play the guided demo.</p>
+      <div class="go"><span>Open →</span><span class="tag m1">Member 1</span></div></a>
+    <a class="fcard" href="freelist.html"><div class="ic">🔗</div><h3>Free list</h3>
+      <p>The <b>linked list</b> of gaps, node by node, plus a strategy lab that shows where First, Best and Worst Fit would allocate.</p>
+      <div class="go"><span>Open →</span><span class="tag m2">Member 2</span></div></a>
+    <a class="fcard" href="analysis.html"><div class="ic">📊</div><h3>Statistics</h3>
+      <p>Free space, largest gap, fragmentation over time, and an explanation of why a request failed.</p>
+      <div class="go"><span>Open →</span><span class="tag m3">Member 3</span></div></a>
+    <a class="fcard" href="compare.html"><div class="ic">⚖️</div><h3>Compare</h3>
+      <p>Run the same workload through all three strategies, or the full small / medium / large experiment, and chart the results.</p>
+      <div class="go"><span>Open →</span><span class="tag m4">Member 4</span></div></a>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="title">How it works</h2>
+  <p class="sub-lead">The page is only the screen. All the data-structure work happens in the C++ program running on this computer.</p>
+  <div class="steps">
+    <div class="step"><h3>You send a request</h3><p>“Allocate file D with 7 blocks.” The button calls the C++ program.</p></div>
+    <div class="step"><h3>C++ picks a gap</h3><p>First, Best or Worst Fit walks the <b>linked list</b> of free segments.</p></div>
+    <div class="step"><h3>Both structures update</h3><p>The <b>array</b> marks the blocks; the list shrinks or removes the node. Releases merge neighbours.</p></div>
+    <div class="step"><h3>The page draws it</h3><p>C++ answers with the new state and the page animates the change.</p></div>
+  </div>
+  <div class="arch" style="margin-top:34px">
+    <div class="box">Browser<small>these pages</small></div><div class="arr">⇄</div>
+    <div class="box">server.cpp<small>web server on your laptop</small></div><div class="arr">→</div>
+    <div class="box">AllocationManager<small>First / Best / Worst Fit</small></div><div class="arr">→</div>
+    <div class="box">Array + Linked list<small>StorageManager · FreeList</small></div><div class="arr">→</div>
+    <div class="box">FragmentationAnalyzer<small>statistics</small></div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="title">The team</h2>
+  <p class="sub-lead">Four members, one module and one page each. Put your names in the cards.</p>
+  <div class="team">
+    <div class="member"><span class="tag m1">Member 1</span><h3>Storage core</h3><p>The array of blocks and the file table.</p>
+      <div class="files">Block.h<br>StorageManager.h/.cpp<br>simulator.html · blocks.js</div><div class="who">Name: ____________</div></div>
+    <div class="member"><span class="tag m2">Member 2</span><h3>Allocation engine</h3><p>The linked list, merging and the three strategies.</p>
+      <div class="files">FreeSegment.h/.cpp<br>AllocationManager.h/.cpp<br>freelist.html · freelist.js</div><div class="who">Name: ____________</div></div>
+    <div class="member"><span class="tag m3">Member 3</span><h3>Fragmentation analyzer</h3><p>Statistics, failure analysis, consistency check.</p>
+      <div class="files">FragmentationAnalyzer.h/.cpp<br>analysis.html · stats.js</div><div class="who">Name: ____________</div></div>
+    <div class="member"><span class="tag m4">Member 4</span><h3>Workloads &amp; experiments</h3><p>Workloads, comparison, server and site wiring.</p>
+      <div class="files">WorkloadSimulator.h/.cpp<br>server.cpp · common.js<br>compare.html · index.html</div><div class="who">Name: ____________</div></div>
+  </div>
+</section>
+
+<footer class="site-foot">Virtual Storage Allocation &amp; Fragmentation Simulator · Data Structures Lab · The array and linked list are implemented in C++; this site only draws what the C++ program reports.</footer>
+
+<script src="js/blocks.js"></script>
+<script src="js/story.js"></script>
+<script src="js/common.js"></script>
+<script>
+  App.start({ page: 'index.html', bar: 'none' });
+
+  // looping illustration of the A, B, C, release A, D-fails story (fixed frames, not the real simulator)
+  (function () {
+    const grid = document.getElementById('heroGrid'), list = document.getElementById('heroList');
+    const cap = document.getElementById('heroCap'), dots = document.getElementById('heroDots');
+    STORY.forEach(function () { dots.appendChild(document.createElement('i')); });
+    let k = 0;
+    function show() {
+      const f = STORY[k], frame = buildFrame(STORY_TOTAL, f.files);
+      drawStoryGrid(grid, frame, f.mark, f.bad);
+      drawStoryList(list, frame);
+      cap.textContent = f.caption;
+      cap.className = 'cap' + (f.bad ? ' bad' : '');
+      Array.prototype.forEach.call(dots.children, function (d, i) { d.className = i === k ? 'on' : ''; });
+      k = (k + 1) % STORY.length;
+    }
+    show();
+    setInterval(show, 3200);
+  })();
+</script>
+</body>
+</html>
